@@ -17,7 +17,7 @@ import edu.wpi.first.units.measure.Distance;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    class DrivetrainConstants {
+    public class DrivetrainConstants {
         public static final double kDefaultDriveSpeed = 0.5; //50% of Max power
         public static final double kDefaultRotSpeed = 0.5; //50% of Max power
         public static final double kCountsPerRevolution = 1440.0;

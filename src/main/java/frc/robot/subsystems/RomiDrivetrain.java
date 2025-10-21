@@ -7,7 +7,13 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.romi.RomiGyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import static edu.wpi.first.units.Units.*;
+
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 
 public class RomiDrivetrain extends SubsystemBase {
   private static final double kCountsPerRevolution = 1440.0;
@@ -27,6 +33,9 @@ public class RomiDrivetrain extends SubsystemBase {
   private final DifferentialDrive m_diffDrive =
       new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
 
+  // Gyro    
+  private final RomiGyro gyro = new RomiGyro();
+
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
     // Use inches as unit for encoder distances
@@ -37,9 +46,16 @@ public class RomiDrivetrain extends SubsystemBase {
     // Invert right side since motor is flipped
     m_rightMotor.setInverted(true);
   }
+  
+  public Angle getAngle() {
+      return Degrees.of(gyro.getAngle());
+  }
 
+  public void resetGyro() {
+      gyro.reset();
+  }
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
-    m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
+    m_diffDrive.arcadeDrive(xaxisSpeed, -zaxisRotate);
   }
 
   public void resetEncoders() {
@@ -47,12 +63,16 @@ public class RomiDrivetrain extends SubsystemBase {
     m_rightEncoder.reset();
   }
 
-  public double getLeftDistanceInch() {
-    return m_leftEncoder.getDistance();
+  public Distance getLeftDistance() {
+    return Meters.of(m_leftEncoder.getDistance());
   }
 
-  public double getRightDistanceInch() {
-    return m_rightEncoder.getDistance();
+  public Distance getRightDistance() {
+    return Meters.of(m_rightEncoder.getDistance());
+  }
+
+  public Distance getAverageDistance() {
+    return getLeftDistance().plus(getRightDistance()).div(2);
   }
 
   @Override

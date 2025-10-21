@@ -28,20 +28,17 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);
 
-  private final RomiDrivetrain romiDrivetrain;
   private final DriveCommand driveCommand;
   private final Joystick stick = new Joystick(0);
   //private final Command translateCommand;
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-
-      romiDrivetrain = new RomiDrivetrain();
-      driveCommand = new DriveCommand(romiDrivetrain, () -> stick.getY(), () -> stick.getX());
+      driveCommand = new DriveCommand(m_romiDrivetrain, () -> stick.getY(), () -> -stick.getX());
 
       //translateCommand = runEnd(() -> romiDrivetrain.arcadeDrive(translateDir * DrivetrainConstants.kDefaultDriveSpeed, 0), () -> romiDrivetrain.arcadeDrive(0, 0), romiDrivetrain).until(() -> romiDrivetrain.getAverageDistance().times(translateDir).gte(distToDrive.times(translateDir))).beforeStarting(runOnce(romiDrivetrain::resetEncoders));
       
-      romiDrivetrain.setDefaultCommand(driveCommand);  
+      m_romiDrivetrain.setDefaultCommand(driveCommand);  
       
       // Configure the button bindings
       configureButtonBindings();
